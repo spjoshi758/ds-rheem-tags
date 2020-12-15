@@ -1,0 +1,21 @@
+[versionner]
+file = ./VERSION
+date_format = %Y-%m-%d
+up_part = patch
+;default_init_version = 1.0.0
+
+[vcs]
+engine = git
+commit_message = '%(version)s'
+;tag_params =
+;  -f
+;  --local-user=sagar-desktop
+
+[file:flask-python/hello-world-flask.py]
+enabled = true
+search = ^\s*__version__\s*=.*$
+replace = version = '%(version)s'
+date_format = %Y-%m-%d
+match = line
+search_flags =
+encoding = utf-8
