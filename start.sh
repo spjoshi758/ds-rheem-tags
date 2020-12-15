@@ -7,7 +7,7 @@ then
     ver up
     ver tag
     git add .
-    git commit -m "version release"
+    git commit -m "new version release"
     git push origin --tags
 else
     echo "$GIT_BRANCH is not master branch"
