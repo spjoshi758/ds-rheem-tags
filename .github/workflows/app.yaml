@@ -1,0 +1,106 @@
+name: Rheem-Ds-tags
+
+on:
+  push:
+    branches:
+      - master
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+    steps:
+      - name: checking repository
+        uses: actions/checkout@v2
+        with:
+          repository: 'ds-rheem-tags'
+      - name: Deploy
+        uses: spjoshi758/ds-rheem-tags@master
+        with:
+          script: ../../start.sh
+
+# name: Rheem-Ds-Portal-CD
+
+# on:
+#   push:
+#     branches:
+#       - master
+#       - main
+#   pull_request:
+#     branches:
+#       - master
+#       - main
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     env:
+#       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+#     steps:
+#       - name: checking repository
+#         uses: actions/checkout@v2
+#         with:
+#           token: ${{ secrets.SUB_MODULE_SECRET }}
+#           submodules: recursive
+#       - name: Load AWS Credentials
+#         uses: aws-actions/configure-aws-credentials@v1
+#         with:
+#           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#           aws-region: us-east-1
+#       - name: Declaring variables
+#         id: vars
+#         shell: bash
+#         run: |
+#           echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+#           echo "##[set-output name=prBranch;]$(echo ${{ github.head_ref }})"
+#           echo "##[set-output name=checkReqUrl;]$(echo ${GITHUB_REF:5:4})"
+#       - name: Notify Deployment started slack
+#         uses: sonots/slack-notice-action@v3
+#         with:
+#           status: custom
+#           payload: |
+#             {
+#               "attachments": [
+#               {
+#                 "text": '${{ steps.vars.outputs.checkReqUrl }}' == 'pull' ? ':large_blue_circle: *Deployment for Rheem-DS-Portal Started*\n *Branch:* ${{ steps.vars.outputs.prBranch }}' : ':large_blue_circle: *Deployment for Rheem-DS-Portal Started*\n *Branch:* ${{ steps.vars.outputs.branch }}'
+#               }
+#             ]
+#             }
+#         env:
+#           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST  }}
+#       - name: Deploy
+#         uses: skx/github-action-tester@master
+#         env:
+#           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+#           API_TOKEN: ${{ secrets.API_TOKEN }}
+#           WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST  }}
+#         with:
+#           script: devops/stack-creation.sh
+#       - name: DNS Mapping
+#         uses: skx/github-action-tester@master
+#         with:
+#           script: devops/elb-dns-mapping.sh
+#         env:
+#           ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+#           AWS_ACCESS_KEY_ID: ${{ secrets.RHEEM_CONNECT_AWS_ACCESS_KEY_ID }}
+#           AWS_SECRET_ACCESS_KEY: ${{ secrets.RHEEM_CONNECT_AWS_SECRET_ACCESS_KEY }}
+#           AWS_ZONE_ID: ${{ secrets.AWS_ZONE_ID }}
+#       - name: Notify Deployment failure slack
+#         if: failure()
+#         uses: sonots/slack-notice-action@v3
+#         with:
+#           status: custom
+#           payload: |
+#               {
+#                 "attachments": [
+#                   {
+#                     "color": "#C9302C",
+#                     "text": '${{ steps.vars.outputs.checkReqUrl }}' == 'pull' ? ':red_circle: *Deployment for Rheem-DS-Portal Failed*\n *Branch:* ${{ steps.vars.outputs.prBranch }}\n *Error:* https://github.com/EcoNet-Rheem/rheem-datascience-portal/actions/runs/${{ github.run_id }}' : ':red_circle: *Deployment for Rheem-DS-Portal Failed*\n *Branch:* ${{ steps.vars.outputs.branch }}\n *Error:* https://github.com/EcoNet-Rheem/rheem-datascience-portal/actions/runs/${{ github.run_id }}'
+#                   }
+#                 ]
+#               }
+#         env:
+#           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL_TEST  }}

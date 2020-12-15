@@ -11,10 +11,10 @@ commit_message = '%(version)s'
 ;  -f
 ;  --local-user=sagar-desktop
 
-[file:flask-python/hello-world-flask.py]
+[file:./flask-python/hello-world-flask.py]
 enabled = true
 search = ^\s*__version__\s*=.*$
-replace = version = '%(version)s'
+replace = __version__ = '%(version)s'
 date_format = %Y-%m-%d
 match = line
 search_flags =
