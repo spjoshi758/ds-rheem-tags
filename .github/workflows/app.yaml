@@ -19,7 +19,7 @@ jobs:
       - name: Deploy
         uses: spjoshi758/ds-rheem-tags@master
         with:
-          script: ../../start.sh
+          script: ../../../start.sh
 
 # name: Rheem-Ds-Portal-CD
 
