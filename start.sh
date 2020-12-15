@@ -4,7 +4,6 @@ GIT_BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
 if [ $GIT_BRANCH = "master" ]
 then
     ver set --build ""
-    ver up --major
     ver tag
     git add .
     git commit -m "version release"
