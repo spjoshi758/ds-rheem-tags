@@ -1,13 +1,18 @@
 #!/bin/sh
 GIT_BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
 
-echo "Branch name is $GIT_BRANCH"
+echo "-----------Branch name is $GIT_BRANCH"
 
-ver set --build ""
-ver up
-ver tag
-git add .
-git commit -m "version release"
-git push origin --tags
+if [ $GIT_BRANCH = "master" ]
+then
+    ver set --build ""
+    ver up
+    ver tag
+    git add .
+    git commit -m "version release"
+    git push origin --tags
+else
+    echo "$GIT_BRANCH is not master branch"
+fi
 
-echo "Tag Updated Successfully"
+echo "----------Tag Updated Successfully"
