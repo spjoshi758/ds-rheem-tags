@@ -5,7 +5,7 @@ if [ $GIT_BRANCH = "master" ]
 then
     ver set --build ""
     ver up
-    ver tag
+    ver tag --minor
     git add .
     git commit -m "version release"
     git push origin --tags
